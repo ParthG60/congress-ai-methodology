@@ -110,9 +110,15 @@ def main():
         w.writeheader()
         w.writerows(text_map_rows)
 
-    print(f"Payload: {len(payload_rows):,} unique chunks → {payload_path}  "
+    # Cardinality check: each (sha, chunk_ix) should appear exactly once in payload
+    n_payload_pairs = len(payload_rows)
+    n_map_pairs = len(text_map_rows)
+    dedup_ratio = n_map_pairs / n_payload_pairs if n_payload_pairs else 1
+    print(f"Payload:  {n_payload_pairs:,} unique chunks → {payload_path}  "
           f"({payload_path.stat().st_size / 1e6:.1f} MB)")
-    print(f"Map:     {len(text_map_rows):,} rows → {map_path}")
+    print(f"Map:      {n_map_pairs:,} rows → {map_path}")
+    print(f"Cardinality (map rows / payload chunks): {dedup_ratio:.1f}x "
+          f"({'(no dedup)' if dedup_ratio == 1.0 else f'net dedup saved {(dedup_ratio-1)*100:.0f}%'})")
 
 
 if __name__ == "__main__":

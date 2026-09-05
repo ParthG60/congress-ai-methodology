@@ -73,6 +73,10 @@ def main():
     out_dir.mkdir(parents=True, exist_ok=True)
 
     rows = []
+    dropped_preamble = 0
+    dropped_findings = 0
+    dropped_findings_combined = 0
+    dropped_control = 0
     for congress in a.congress:
         for session in [1, 2]:
             sess_dir = RAW / str(congress) / str(session)
@@ -104,7 +108,8 @@ def main():
                     preamble_text = " ".join(
                         t.strip() for t in preamble_els if t.strip()
                     )
-                    if len(preamble_text.split()) >= MIN_WORDS:
+                    n_preamble_words = len(preamble_text.split())
+                    if n_preamble_words >= MIN_WORDS:
                         rows.append({
                             "package_id": package_id,
                             "congress": congress_num,
@@ -115,6 +120,8 @@ def main():
                             "block_type": "preamble",
                             "text": preamble_text,
                         })
+                    else:
+                        dropped_preamble += 1
 
                     # ---- findings ----
                     target_texts = []
@@ -130,12 +137,16 @@ def main():
                             for qb in sec.iter(QUOTED_BLOCK):
                                 sec_text = sec_text.replace(text_of(qb) + " ", "")
                                 sec_text = sec_text.replace(text_of(qb), "")
-                            if len(sec_text.split()) >= MIN_WORDS:
+                            n_find_words = len(sec_text.split())
+                            if n_find_words >= MIN_WORDS:
                                 target_texts.append(sec_text)
+                            else:
+                                dropped_findings += 1
 
                     if target_texts:
                         findings_text = " ".join(target_texts)
-                        if len(findings_text.split()) >= MIN_WORDS:
+                        n_find_combined = len(findings_text.split())
+                        if n_find_combined >= MIN_WORDS:
                             rows.append({
                                 "package_id": package_id,
                                 "congress": congress_num,
@@ -146,6 +157,8 @@ def main():
                                 "block_type": "findings",
                                 "text": findings_text,
                             })
+                        else:
+                            dropped_findings_combined += 1
 
                     # ---- control (everything else) ----
                     control_parts = []
@@ -160,8 +173,11 @@ def main():
                             continue
                         sec_text = text_of(sec)
                         # Include quoted blocks for control (legalese baseline)
-                        if len(sec_text.split()) >= MIN_WORDS:
+                        n_control_words = len(sec_text.split())
+                        if n_control_words >= MIN_WORDS:
                             control_parts.append(sec_text)
+                        else:
+                            dropped_control += 1
 
                     if control_parts:
                         # Take enough from the start to fill CONTROL_CAP words
@@ -189,6 +205,14 @@ def main():
         for r in rows:
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
     print(f"Wrote {len(rows):,} blocks → {OUT}")
+    total_dropped = dropped_preamble + dropped_findings + dropped_findings_combined + dropped_control
+    if total_dropped:
+        print(f"Dropped below MIN_WORDS ({MIN_WORDS}):")
+        print(f"  preamble: {dropped_preamble:,}")
+        print(f"  findings (per-section): {dropped_findings:,}")
+        print(f"  findings (combined): {dropped_findings_combined:,}")
+        print(f"  control: {dropped_control:,}")
+        print(f"  total: {total_dropped:,}")
 
 
 if __name__ == "__main__":
