@@ -2,16 +2,36 @@
 
 **This repository is a technical replication package for the article "AI Use on Capitol Hill."** It contains the exact data, scripts, and methodology documentation needed to verify every statistical claim in the piece.
 
-## Quickstart
+## Two Tiers of Replicability
+
+### Tier 1: Instant Replication (you are here)
 
 ```bash
 pip install -r requirements.txt
 python replicate.py
 ```
 
-This runs all four replication scripts in sequence and prints terminal tables matching every number in the article. Three figures are saved to `figures/`.
+Reproduces every article table and figure from pre-scored data. **<10 seconds, $0, no API keys.**
 
-Total runtime: **< 10 seconds** on any laptop. No GPU, no API keys, no HuggingFace tokens.
+### Tier 2: Full Upstream Scoring (from raw XML)
+
+See `pipeline/README.md` for the complete end-to-end workflow that regenerates the scored
+analytical CSVs from scratch — GPO bulk XML → Modal GPU inference → Pangram API audit →
+calibration → replication. Requires HuggingFace access, a Modal account, and a Pangram
+API key. Total cloud cost: ~$5.30.
+
+```
+pipeline/
+├── fetch_bills.py           # Download GPO bulk XML
+├── extract_blocks.py        # Parse XML into preamble/findings/control blocks
+├── make_payload.py          # Hash + chunk for GPU inference
+├── score_modal.py           # Modal L4 GPU inference app
+├── score_editlens_reference.py  # Local CPU/CUDA fallback
+├── score_pangram_api.py     # Pangram Commercial API audit
+├── assemble_dataset.py      # Scored chunks → analytical CSVs
+├── requirements-pipeline.txt# Heavy dependencies
+└── README.md                # Step-by-step full guide
+```
 
 ## Claim-to-Code Mapping
 

@@ -33,3 +33,6 @@ This project measures AI-assisted writing in US federal legislation (116th-119th
 pip install -r requirements.txt
 python replicate.py
 ```
+
+## Full Pipeline (Tier 2)
+To reproduce the scoring from scratch (GPO XML → Modal GPU → analytical CSVs), see `pipeline/README.md`. Requires HuggingFace token, Modal account, and Pangram API key. ~$5.30 in cloud costs.

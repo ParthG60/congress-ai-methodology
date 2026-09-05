@@ -6,6 +6,7 @@ This repository provides transparent, reproducible methodology for the article "
 ## Architecture
 - **Data:** Clean analytical CSVs in `data/` (small enough for full-agent ingestion if needed)
 - **Code:** Self-contained Python scripts in `scripts/` (no local path dependencies, no API keys)
+- **Scoring Pipeline:** `pipeline/` contains the full upstream workflow (Tier 2) — from GPO XML to scored CSVs. See `pipeline/README.md`.
 - **Output:** Terminal tables printed by each script; figures saved to `figures/`
 
 ## Verification Checklist
