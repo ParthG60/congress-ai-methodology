@@ -1,0 +1,35 @@
+# Congress AI Methodology
+
+## Overview
+This project measures AI-assisted writing in US federal legislation (116th-119th Congress, 2019-2026). The key innovation: scoring only staff-written political-language blocks (findings and preambles) rather than whole bills.
+
+## Key Files
+
+- `replicate.py` — master replication script
+- `METHODOLOGY.md` — full methodological whitepaper
+- `data/federal_content_bills_119.csv` — primary analysis sample (N=2,994)
+
+## Data Sources
+- GPO govinfo BILLS: https://www.govinfo.gov/bulkdata/BILLS/
+- GPO govinfo BILLSTATUS: https://www.govinfo.gov/bulkdata/BILLSTATUS/
+- Detector: https://huggingface.co/pangram/editlens_roberta-large
+
+## Headline Results
+- 6.4% of bills likely AI-assisted (2026Q2)
+- ~15% of Extensions of Remarks
+- AI use is bipartisan (D: 6.14%, R: 6.75%)
+- Driven by thin institutional capacity
+- Finance (committee pipeline): 11% AI rate
+- Labor (union veto players): 0% AI rate
+
+## Key Scripts
+- `scripts/01_replicate_prevalence.py` — prints prevalence tables
+- `scripts/02_replicate_regressions.py` — prints 119th Congress regression output
+- `scripts/03_replicate_mechanisms.py` — sector mechanism breakdown
+- `scripts/04_generate_figures.py` — generates 3 publication-ready charts
+
+## Quickstart
+```bash
+pip install -r requirements.txt
+python replicate.py
+```
