@@ -65,7 +65,4 @@ Results of Pangram 3.3.2 commercial detector audit on 47 flagged bills.
 | `sector` | str | Finance / Crime / Labor |
 | `confirmed_ai` | int | Pangram verdict: 0/1 |
 
-## bills.csv (bill metadata)
-Full bill corpus with committee assignments, outcomes, and sponsor info.
-
 All data derived from GPO govinfo public domain sources.

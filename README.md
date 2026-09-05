@@ -43,7 +43,7 @@ Total runtime: **< 10 seconds** on any laptop. No GPU, no API keys, no HuggingFa
 │   ├── quarterly_control_baseline.csv     # Statutory text control series
 │   ├── crec_prevalence_calibrated.csv     # CREC Extensions of Remarks series
 │   ├── pangram_outlier_audit.csv          # 47-bill Pangram 3.3.2 audit
-│   └── bills.csv                          # Bill metadata (committees, outcomes)
+│   └── bills.csv                          # Bill metadata (committees, outcomes; not in repo — too large)
 │
 ├── scripts/                   # Self-contained replication scripts
 │   ├── 01_replicate_prevalence.py
