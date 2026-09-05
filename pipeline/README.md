@@ -17,7 +17,7 @@ This script replicates the exact scoring logic from the Pangram EditLens paper. 
 - Computes the same bucket-weighted score
 
 **Prerequisites (not included in scope):**
-- HuggingFace token with license acceptance for `pangram/editlens_roberta-large`
+- HuggingFace token with license acceptance for `pangram/editlens_Llama-3.2-3B`
 - ~16 CPU-hours or GPU with 8+ GB VRAM for the full corpus
 
 ## Data Flow

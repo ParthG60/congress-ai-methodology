@@ -68,7 +68,7 @@ All raw data is from free, public U.S. government sources:
 - **BILLS (govinfo):** Full bill XML for 116th–119th Congress (2019–2026)
 - **BILLSTATUS (govinfo):** Enactment status, cosponsorship, policy area per bill
 - **CREC (govinfo):** Congressional Record Extensions of Remarks (floor insertions)
-- **Detector:** [Pangram EditLens RoBERTa-large](https://huggingface.co/pangram/editlens_roberta-large) (paper: [arXiv 2510.03154](https://arxiv.org/abs/2510.03154))
+- **Detector:** [Pangram EditLens 3B (Llama-3.2-3B)](https://huggingface.co/pangram/editlens_Llama-3.2-3B) (paper: [arXiv 2510.03154](https://arxiv.org/abs/2510.03154))
 
 **Author:** Parth Goyal — [parthsdatastack](https://parthgoyal.uk) / [@parthsdatastack](https://substack.com/@parthsdatastack)
 

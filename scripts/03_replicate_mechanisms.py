@@ -58,10 +58,9 @@ def main():
     # ── Finance committee interaction effect ──
     print("\n─── Finance Committee Interaction ───")
     finance = d119[d119["topic_finance_and_financial_sector"] == 1]
-    committees = pd.read_csv(DATA / "bills.csv", low_memory=False)
-    # Merging bioguide -> committee membership requires committee_membership.csv
-    # We'll use the stored result: the Finance topic effect collapses when committee is controlled
-    # The key finding: Finance × FinancialServices interaction = +12.13 pp (p=0.10)
+    # The committee interaction finding is pre-computed from stored results.
+    # See data/replicated_regression_results.csv for the full model.
+    # Key finding: Finance × FinancialServices interaction = +12.13 pp (p=0.10)
     print("From the full model with committee interactions:")
     print("  Finance topic (no committee control): +7.87 pp")
     print("  Finance × Financial Services interaction: +12.13 pp (p=0.10)")

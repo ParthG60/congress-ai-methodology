@@ -2,14 +2,15 @@
 Reference: EditLens scoring logic for congressional blocks.
 
 This replicates the exact inference from Pangram EditLens paper
-(arXiv:2510.03154). Not required for replication — provided for
+(arXiv:2510.03154) for the Llama-3.2-3B model.
+Not required for replication — provided for
 transparency on how raw scores are computed.
 """
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 
-MODEL_NAME = "pangram/editlens_roberta-large"
+MODEL_NAME = "pangram/editlens_Llama-3.2-3B"
 N_BUCKETS = 4  # EditLens uses a 4-way softmax head
 
 

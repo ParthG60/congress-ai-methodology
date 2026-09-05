@@ -12,7 +12,7 @@ This project measures AI-assisted writing in US federal legislation (116th-119th
 ## Data Sources
 - GPO govinfo BILLS: https://www.govinfo.gov/bulkdata/BILLS/
 - GPO govinfo BILLSTATUS: https://www.govinfo.gov/bulkdata/BILLSTATUS/
-- Detector: https://huggingface.co/pangram/editlens_roberta-large
+- Detector: https://huggingface.co/pangram/editlens_Llama-3.2-3B
 
 ## Headline Results
 - 6.4% of bills likely AI-assisted (2026Q2)

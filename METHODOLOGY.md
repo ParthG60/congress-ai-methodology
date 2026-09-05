@@ -16,18 +16,16 @@ A bill introduced in Congress is not written by one person. It has three layers:
 
 **Our approach:** Score only the political-layer blocks (findings and preambles), not the statutory text. This is the sole methodological innovation that makes the measurement credible.
 
-## Detector Choice: EditLens vs Classification
+## Detector Choice: Pangram EditLens 3B
 
-We use **Pangram EditLens (RoBERTa-large)**, a 355M-parameter model fine-tuned to regress on the *edit magnitude* between a human original and an AI-edited version (paper: [arXiv 2510.03154](https://arxiv.org/abs/2510.03154)). It is *not* a binary AI-vs-human classifier:
+We use **Pangram EditLens 3B (Llama-3.2-3B)**, the best available open detector for AI-assisted text, fine-tuned to measure the *edit magnitude* between a human original and an AI-edited version (paper: [arXiv 2510.03154](https://arxiv.org/abs/2510.03154)):
 
 - Training target: cosine similarity between human draft and AI-edited version
 - Output: a score in [0, 1] measuring how far text was moved from a human baseline
 - Training domains: Amazon/Google reviews, Reddit Writing Prompts, FineWeb-EDU, XSum, CNN/DailyMail
 - **Congressional text is far outside all training domains**
 
-### Why not binary classifiers (GPTZero, Originality.ai, etc.)?
-
-Binary classifiers produce a single "probability of AI" that conflates editing magnitude with generation likelihood. They are trained to detect *full generation* (GPT-4 writes a paragraph) rather than *editing* (a staffer writes a draft, then asks Claude to polish it). EditLens's edit-magnitude regression is better suited to the real-world use case: staff writing with AI assistance rather than wholesale AI generation.
+We do not use a binary classifier. EditLens's edit-magnitude regression is better suited to detecting partial AI assistance (a staffer writes a draft, then polishes with AI) than full-generation classifiers.
 
 ## The Score Is Not a Probability
 
@@ -112,7 +110,7 @@ This confirms that the rise in AI scores after November 2022 is not a domain art
 
 4. **Majority-party flips:** The House flipped to Republican control in January 2023 (2 months post-ChatGPT). Raw party adoption rates could be majority-control artefacts. We control for `sponsor_in_majority` in all specifications.
 
-### Headline Results (119th Congress)
+### Headline Results (119th Congress, calibrated binary P(AI) >= 0.50)
 
 | Predictor | Coefficient (pp) | SE | p-value |
 |---|---|---|---|
@@ -123,25 +121,23 @@ This confirms that the rise in AI scores after November 2022 is not a domain art
 | Finance & Financial Sector | +7.87 | 3.72 | 0.034 * |
 | Labor & Employment | -2.89 | 0.42 | <0.001 *** |
 
-R2 = 0.026, N = 2,994 (119th Congress). Outcome: P(AI) >= 0.50 (EditLens score >= 0.65). LPM with sponsor-clustered SEs.
-
-A note on the low R2: binary LPM on rare outcomes (3.9% prevalence) is structurally capped. The logistic AUC-ROC of 0.72 confirms moderate but real discrimination (5-fold CV AUC-PR = 0.11 vs baseline prevalence of 0.04 — a 2.7x lift over random).
+N = 2,994 (119th Congress). Outcome: P(AI) >= 0.50 (EditLens score >= 0.65). LPM with sponsor-clustered SEs. AUC-ROC = 0.72.
 
 ## Sector Mechanisms
 
-### Finance (11% AI rate — Committee Pipeline)
+### Finance (11% AI rate)
 
-Finance and financial-sector bills have the highest AI prevalence. The mechanism is **committee-industry pipeline**: the key interaction is Finance topic × Financial Services/Senate Banking committee membership. Adding this interaction collapses the Finance topic effect from +7.87 pp to +2.07 pp (interaction = +12.13 pp, p=0.10). Qualitative inspection of all 7 Finance AI-positive bills confirms all were sponsored by committee members except Rep. Castro (who publicly expenses AI writing software). Typical bills: Bitcoin reserve, Dodd-Frank 1071 repeal, Fed communication reform.
+Finance and financial-sector bills have the highest AI prevalence. The pattern is consistent with a **committee-industry pipeline**: the key interaction is Finance topic × Financial Services/Senate Banking committee membership. Adding this interaction collapses the Finance topic effect from +7.87 pp to +2.07 pp (interaction = +12.13 pp, p=0.10). Qualitative inspection of all 7 Finance AI-positive bills confirms all were sponsored by committee members except Rep. Castro (who publicly expenses AI writing software). Typical bills: Bitcoin reserve, Dodd-Frank 1071 repeal, Fed communication reform.
 
-### Crime (11% AI rate — Rapid-Response Messaging)
+### Crime (11% AI rate)
 
-Crime bills are different: no committee concentration (Judiciary × Crime interaction = +2.58 pp, p=0.65). The AI-positive Crime bills are news-cycle-driven rapid-response messaging: Trump Gold Medal, gender transition criminalization, ICE riots, nitazene opioid crisis, Epstein document release, AI chatbots harming minors. Mean length: approximately 188 words — effectively press releases with bill numbers. These are written by junior staff under 24-hour deadlines.
+Crime bills show no committee concentration (Judiciary × Crime interaction = +2.58 pp, p=0.65). The AI-positive Crime bills are short, news-cycle-driven: Trump Gold Medal, gender transition criminalization, ICE riots, nitazene opioid crisis, Epstein document release, AI chatbots harming minors. Mean length: approximately 188 words — press releases with bill numbers. These correlate with rapid-response contexts where junior staff draft under tight deadlines.
 
-### Labor (0% AI rate — Institutional Veto Players)
+### Labor (0% AI rate)
 
 Labor bills show zero AI prevalence. Two categories:
 1. Recurring Equal Pay Day resolutions (~40%) drafted by outside advocacy coalitions.
-2. Statutory amendments (FLSA, ERISA, union bills) reviewed by AFL-CIO legal teams. The presence of institutional veto players (union GCs, coalition partners) makes AI use costly and detectable.
+2. Statutory amendments (FLSA, ERISA, union bills) reviewed by AFL-CIO legal teams. The presence of institutional veto players (union GCs, coalition partners) appears to make AI use costly and detectable — though we cannot rule out that the content type itself (dense labor statistics, cross-referenced statutory law) is simply harder for AI to draft credibly.
 
 The zero rate is confirmed by an independent Pangram 3.3.2 audit: all 18 Labor sample bills returned fraction_ai = 0.0000.
 
@@ -167,8 +163,6 @@ The single Finance false positive (s2019 TRAPS Act) reads like a genuine human s
 
 4. **No individual intent inference:** A high AI score indicates the text reads as edited by AI. It does not identify *who* used the tool (staff vs. member), whether the user had permission, or whether the use violated internal policy.
 
-5. **Coverage gap:** We do not measure AI use in committee reports, conference reports, floor speeches with Extensions of Remarks (CREC extension texts are included but full CREC floor speeches are not fully analyzed in this release).
-
 ## Appendix: CREC Extensions of Remarks
 
 We also analyzed Congressional Record Extensions of Remarks (floor insertions from the 119th Congress). These are short statements appended to the record, typically written by junior staff with minimal review. The prevalence rate is higher than for bills (~15% in Q2 2026), consistent with the thin-institutional-capacity mechanism: less formal review = more AI use.
@@ -179,4 +173,4 @@ All raw data from free public U.S. government APIs:
 - **GPO govinfo BILLS:** https://www.govinfo.gov/bulkdata/BILLS/
 - **GPO govinfo BILLSTATUS:** https://www.govinfo.gov/bulkdata/BILLSTATUS/
 - **GPO govinfo CREC:** https://www.govinfo.gov/bulkdata/CREC/
-- **Detector:** https://huggingface.co/pangram/editlens_roberta-large
+- **Detector:** https://huggingface.co/pangram/editlens_Llama-3.2-3B

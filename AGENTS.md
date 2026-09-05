@@ -32,7 +32,7 @@ This repository provides transparent, reproducible methodology for the article "
 - Script: `scripts/02_replicate_regressions.py` → `is_house` coefficient
 - Should be positive and p < 0.01
 
-### Claim 6: "Finance AI is committee-pipeline driven"
+### Claim 6: "Finance AI correlates with committee membership"
 - Script: `scripts/03_replicate_mechanisms.py` → Finance section
 - Shows 11% prevalence and committee interaction
 
@@ -42,7 +42,7 @@ This repository provides transparent, reproducible methodology for the article "
 
 ## Data Schema (for agent code-writing)
 The main analysis file `data/federal_content_bills_119.csv` has 2,994 rows and ~70 columns. Key columns for analysis:
-- `score_max`: raw EditLens score (float, 0-1)
+- `score_max`: raw EditLens 3B score (float, 0-1)
 - `is_house`: dummy (1 or 0)
 - `sponsor_party`: "D", "R", "I"
 - `topic_crime_and_law_enforcement`, `topic_finance_and_financial_sector`, `topic_labor_and_employment`: topic dummies
