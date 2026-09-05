@@ -90,7 +90,6 @@ def main():
     df["intercept"] = 1.0
     df["is_solo_sponsor"] = (df["n_cosponsors"].fillna(0) == 0).astype(float)
     df["age_per_decade_younger"] = (60.0 - df["member_age"]) / 10.0
-    df["ln_words"] = df["ln_words"] - df["ln_words"].mean()
     df["age_per_decade_younger"] -= df["age_per_decade_younger"].mean()
     for name, cut in THRESHOLDS.items():
         df[name] = (df["score_max"] >= cut).astype(float)

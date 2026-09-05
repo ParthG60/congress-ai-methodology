@@ -127,7 +127,7 @@ N = 2,994 (119th Congress). Outcome: P(AI) >= 0.50 (EditLens score >= 0.65). LPM
 
 ### Finance (11% AI rate)
 
-Finance and financial-sector bills have the highest AI prevalence. The pattern is consistent with a **committee-industry pipeline**: the key interaction is Finance topic × Financial Services/Senate Banking committee membership. Adding this interaction collapses the Finance topic effect from +7.87 pp to +2.07 pp (interaction = +12.13 pp, p=0.10). Qualitative inspection of all 7 Finance AI-positive bills confirms all were sponsored by committee members except Rep. Castro (who publicly expenses AI writing software). Typical bills: Bitcoin reserve, Dodd-Frank 1071 repeal, Fed communication reform.
+Finance bills have the highest AI prevalence. The Finance topic effect (+7.87 pp, p=0.034) in the 6-predictor model collapses to +2.01 pp when Financial Services / Senate Banking committee membership and its interaction are added. The committee interaction itself is +12.73 pp (p=0.095). Of 72 Finance topic bills in the 119th, 32 are sponsored by Financial Services or Banking committee members.
 
 ### Crime (11% AI rate)
 
